@@ -1,0 +1,12 @@
+<svg id="square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 666 503">
+	<style>
+		.st0 {
+			fill: none;
+			stroke: #C0FFFF;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 50;
+		}
+	</style>
+	<path class="st0" d="M5,236C5,159,5,82,5,5c102,0,204,0,306,0c0,154,0,308,0,462c102,0,204,0,306,0c0-78,0-155,0-233.3"/>
+</svg>
