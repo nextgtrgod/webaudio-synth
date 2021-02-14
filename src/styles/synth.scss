@@ -1,0 +1,221 @@
+
+#synth {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	width: 825px;
+	height: 360px;
+	padding: 5px;
+	display: flex;
+	justify-content: flex-start;
+	background-color: rgba(38, 39, 47, .85);
+	box-shadow: 1px 1px 0px $color-primary;
+	border: 2px solid $color-primary;
+	border-radius: 10px;
+	opacity: 0;
+	animation-duration: .4s;
+	animation-fill-mode: forwards;
+	border-top: 10px solid $color-primary;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	z-index: 1;
+
+	.module {
+		position: relative;
+		flex: 0 1 20%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-right: 5px;
+		padding: 20px 0;
+		border-right: 1px solid $color-primary;
+		justify-content: center;
+
+		&:last-of-type {
+			border: none;
+			margin: 0;
+		}
+		
+		&.lfo {
+			.knob-group {
+				ul {
+					top: unset;
+					left: 0;
+					right: 0;
+					bottom: -30px;
+					margin: auto;
+					width: 80%;
+					transition: opacity .2s;
+					pointer-events: all;
+					li {
+						margin: 0 5px;
+					}
+				}
+			}
+		}
+
+		&.vca {
+			align-items: flex-start;
+			.knob-wrapper {
+				margin: 0 0 0 10px;
+				&:after {
+					left: unset;
+					bottom: 50%;
+					left: 110%;
+					margin: auto;
+				}
+			}
+		}
+	
+		&.delay {
+			justify-content: flex-end;
+			padding-bottom: 0;
+		}
+
+		h2 {
+			position: absolute;
+			top: 5px;
+			left: 0;
+			right: 0;
+			margin: auto;
+			font-size: 1.1em;
+			text-align: center;
+			text-transform: uppercase;
+			letter-spacing: 5px;
+			text-shadow: 2px 2px 0px #111;
+			user-select: none;
+		}
+
+		.knob-wrapper {
+			position: relative;
+			margin: 15px 0;
+			text-align: center;
+			transition: opacity .2s;
+			pointer-events: all;
+			z-index: 2;
+			&:after {
+				content: attr(data-label);
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: -5px;
+				margin: auto;
+				font-size: 12px;
+				text-align: center;
+				text-shadow: 1px 1px 0px #111;
+				letter-spacing: 1px;
+			}
+			&>* {
+				display: inline-block !important;
+			}
+			input {
+				letter-spacing: 1px;
+				text-shadow: 1px 2px 0px #111;
+			}
+		}
+
+		.knob-group {
+			position: relative;
+			display: flex;
+			justify-content: center;
+			
+			// osc step offset
+			[id$='offset'] {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				transition: opacity .2s;
+				z-index: 2;
+
+				input {
+					font-size: 12px;
+					padding: 0px 0;
+					&:focus {
+						outline: none;
+						box-shadow: none;
+					}
+				}
+
+				button {
+					width: 100%;
+					height: 20px;
+					padding: 0;
+					background-color: transparent;
+					background-image: url('../assets/images/arrow.svg');
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+					border: none;
+					cursor: pointer;
+					opacity: .65;
+					transition: opacity .1s;
+					&:hover {
+						opacity: 1;
+					}
+					&.step-up {
+						transform: rotate(180deg);
+					}
+				}
+			}
+
+			.knob-wrapper {
+				flex: 1 0 45%;
+				align-self: flex-end;
+				user-select: none;
+				&[data-label='fback'] {
+					margin-right: 10px;
+				}
+			}
+
+			// wavetype select list
+			ul {
+				position: absolute;
+				top: 10px;
+				right: -5px;
+				width: 40%;
+				height: 25px;
+				display: flex;
+				z-index: 2;
+
+				li {
+					flex: 1 1 33%;
+					margin: 0 2px;
+					background-size: 100%;
+					background-position: center;
+					background-repeat: no-repeat;
+					opacity: .4;
+					transition: all .2s;
+					cursor: pointer;
+
+					&[data-wavetype='sine'] {
+						background-image: url('../assets/images/sine.svg');
+					}
+					&[data-wavetype='sawtooth'] {
+						background-image: url('../assets/images/sawtooth.svg');
+					}
+					&[data-wavetype='square'] {
+						background-image: url('../assets/images/square.svg');
+					}
+
+					&:hover,
+					&.selected {
+						opacity: 1;
+					}
+				}
+			}
+		}
+
+	}
+
+	input {
+		width: 30px;
+		text-align: center;
+		cursor: pointer;
+	}
+
+}

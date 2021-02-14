@@ -1,0 +1,33 @@
+
+#keyboard {
+	position: absolute !important;
+	top: calc(50% - 60px);
+	left: 0;
+	right: 0;
+	margin: auto !important;
+	opacity: 0;
+	animation-duration: .4s;
+	animation-fill-mode: forwards;
+	transform: rotateX(45deg) translateY(300px);
+	z-index: 99;
+
+	&[data-enabled='false'] {
+		ul {
+			opacity: 0;
+		}
+	}
+
+	&[data-enabled='true'] {
+		ul {
+			opacity: 1;
+		}
+	}
+
+	ul {
+		margin: auto !important;
+		transition: opacity .2s;
+		li {
+			border-radius: 5px !important;
+		}
+	}
+}

@@ -1,8 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
+import './styles/main.scss'
 
-Vue.config.productionTip = false
+import Synth from './modules/Synth'
+import MIDI from './modules/MIDI'
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+const synth = new Synth()
+const midi = new MIDI(synth)
+
+synth.store.subscribe(
+	'options',
+	() => midi.set(synth.store.settings.options.midi)
+)
+
+console.log(synth)

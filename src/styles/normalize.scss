@@ -1,0 +1,40 @@
+
+html, body {
+	height: 100%;
+}
+
+body {
+	position: relative;
+	margin: 0;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+button,
+input {
+	font: inherit;
+	color: inherit;
+	border: none;
+	background: transparent;
+	user-select: none;
+	outline: none;
+}
+
+input[type='number'] {
+	-moz-appearance: textfield;
+	
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+}
+
+input,
+div {
+	box-sizing: border-box;
+}

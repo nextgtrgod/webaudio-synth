@@ -1,20 +1,24 @@
 {
-  "name": "webaudio-synth",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
-  },
-  "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
-  }
+	"name": "webaudio-synth",
+	"version": "1.1.0",
+	"author": "nextgtrgod",
+	"scripts": {
+		"start": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"deploy": "./deploy.sh"
+	},
+	"dependencies": {
+		"core-js": "^3.6.5",
+		"jquery": "^3.5.1",
+		"jquery-knob": "^1.2.11",
+		"qwerty-hancock": "^0.9.0",
+		"standardized-audio-context": "^25.1.9"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "~4.5.0",
+		"@vue/cli-service": "~4.5.0",
+		"sass": "^1.26.5",
+		"sass-loader": "^8.0.2",
+		"vue-template-compiler": "^2.6.11"
+	}
 }

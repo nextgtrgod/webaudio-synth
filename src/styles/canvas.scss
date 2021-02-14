@@ -1,0 +1,20 @@
+
+canvas {
+	user-select: none;
+
+	&#wires,
+	&#visual {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+	}
+}
+	
+#visual {
+	transition: opacity .2s;
+	&[data-visible='false'] {
+		opacity: 0;
+	}
+}

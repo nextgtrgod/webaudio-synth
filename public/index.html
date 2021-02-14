@@ -1,17 +1,154 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<meta http-equiv='X-UA-Compatible' content='ie=edge'>
+	<title>WebAudio Synth</title>
+
+	<link href='favicon.ico' rel='icon' type='image/x-icon'>
+</head>
+<body style="background-color: #222;">
+
+	<canvas id='visual'></canvas>
+
+	<div id='synth'>
+		<div class='vco module'>
+			<h2>VCO</h2>
+
+			<div class='knob-group' id='osc1'>
+				<div id='osc1__offset'>
+					<button class='step-up'></button>
+					<input type='number' min='-12' max='12' value='0' readonly tabindex='-1'>
+					<button class='step-down'></button>
+				</div>
+				<div class='knob-wrapper' data-label='gain'>
+					<input type='text' id='osc1__gain'>
+				</div>
+				<div class='knob-wrapper'>
+					<input type='text' id='osc1__detune'>
+				</div>
+				<ul id='osc1__wavetype'>
+					<li data-wavetype='sine'></li>
+					<li data-wavetype='sawtooth'></li>
+					<li data-wavetype='square'></li>
+				</ul>
+			</div>
+
+			<div class='knob-group' id='osc2'>
+				<div id='osc2__offset'>
+					<button class='step-up'></button>
+					<input type='number' min='-12' max='12' value='0' readonly tabindex='-1'>
+					<button class='step-down'></button>
+				</div>
+				<div class='knob-wrapper' data-label='gain'>
+					<input type='text' id='osc2__gain'>
+				</div>
+				<div class='knob-wrapper'>
+					<input type='text' id='osc2__detune'>
+				</div>
+				<ul id='osc2__wavetype'>
+					<li data-wavetype='sine'></li>
+					<li data-wavetype='sawtooth'></li>
+					<li data-wavetype='square'></li>
+				</ul>
+			</div>
+
+			<div class='knob-group' id='osc3'>
+				<div id='osc3__offset'>
+					<button class='step-up'></button>
+					<input type='number' min='-12' max='12' value='0' readonly tabindex='-1'>
+					<button class='step-down'></button>
+				</div>
+				<div class='knob-wrapper' data-label='gain'>
+					<input type='text' id='osc3__gain'>
+				</div>
+				<div class='knob-wrapper'>
+					<input type='text' id='osc3__detune'>
+				</div>
+				<ul id='osc3__wavetype'>
+					<li data-wavetype='sine'></li>
+					<li data-wavetype='sawtooth'></li>
+					<li data-wavetype='square'></li>
+				</ul>
+			</div>
+	
+		</div>
+
+		<div class='vcf module'>
+			<h2>VCF</h2>
+			<div class='knob-wrapper' data-label='cutoff'>
+				<input type='text' id='filter__freq'>
+			</div>
+			<div class='knob-wrapper' data-label='q'>
+				<input type='text' id='filter__qual'>
+			</div>
+		</div>
+
+		<div class='lfo module'>
+			<h2>LFO</h2>	
+			<div class='knob-wrapper' data-label='amount'>
+				<input type='text' id='lfo__amount'>
+			</div>
+			<div class="knob-group">
+				<div class='knob-wrapper' data-label='freq'>
+					<input type='text' id='lfo__freq'>
+				</div>
+				<ul id='lfo__wavetype'>
+					<li data-wavetype='sine'></li>
+					<li data-wavetype='sawtooth'></li>
+					<li data-wavetype='square'></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class='vca module'>
+			<h2>VCA</h2>
+			<div class='knob-wrapper' data-label='attack'>
+				<input type='text' id='attack'>
+			</div>
+			<div class='knob-wrapper' data-label='decay'>
+				<input type='text' id='decay'>
+			</div>
+			<div class='knob-wrapper' data-label='sustain'>
+				<input type='text' id='sustain'>
+			</div>
+			<div class='knob-wrapper' data-label='release'>
+				<input type='text' id='release'>
+			</div>
+		</div>
+
+		<div class='delay module'>
+			<h2>Delay</h2>
+			<div class='knob-wrapper' data-label='gain'>
+				<input type='text' id='delay__gain'>
+			</div>
+			<div class='knob-wrapper' data-label='time'>
+				<input type='text' id='delay__time'>
+			</div>
+			<div class='knob-group'>
+				<div class='knob-wrapper' data-label='fback'>
+					<input type='text' id='delay__feedback'>
+				</div>
+				<div class='knob-wrapper' data-label='cutoff'>
+					<input type='text' id='delay__cutoff'>
+				</div>
+			</div>
+		</div>
+
+		<canvas id='wires' width='820' height='725'></canvas>
+
+	</div>
+
+	<div id='keyboard' data-enabled='true'></div>
+
+	<div id="options">
+		<button class='toggle-options' title='options'></button>
+		<ul>
+			<li data-option='midi' data-status='off' title='enable/disable MIDI'></li>
+			<li data-option='keyboard' data-status='on' title='show/hide virtual keyboard'></li>
+			<li data-option='visualization' data-status='on' title='show/hide audio visualization'></li>
+		</ul>
+	</div>
+</body>
 </html>

@@ -1,0 +1,43 @@
+@import './normalize.scss';
+@import './variables.scss';
+
+body {
+	background-color: #222;
+	color: $color-primary;
+	font-family: $font-family-default;
+	overflow: hidden;
+	perspective: 1000px;
+	
+	&.on-wires-drawing {
+		[id$='offset'],
+		.knob-wrapper,
+		ul {
+			opacity: .4;
+			pointer-events: none;
+		}
+
+		#keyboard {
+			z-index: 0
+		}
+	}
+	
+	&.loaded {
+		#synth,
+		#keyboard,
+		#options {
+			animation-name: fade-in;
+		}
+	}
+}
+
+
+@import './synth.scss';
+@import './canvas.scss';
+@import './keyboard.scss';
+@import './options.scss';
+@import './animations.css';
+
+input {
+	pointer-events: none;
+	user-select: none;
+}

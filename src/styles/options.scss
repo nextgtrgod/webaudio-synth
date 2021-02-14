@@ -1,0 +1,125 @@
+@import './variables.scss';
+
+#options {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	opacity: 0;
+	animation-duration: .4s;
+	animation-fill-mode: forwards;
+
+	&>* {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	&.visible {
+		.toggle-options {
+			transform: rotate(180deg);
+			opacity: 1;
+		}
+
+		ul {
+			li {
+				transform: translateY(0%);
+				opacity: .75;
+				pointer-events: all;
+
+				&:nth-child(1) {
+					transition: transform .1s ease 0s, opacity .1s 0s;
+				}
+				&:nth-child(2) {
+					transition: transform .1s ease .1s, opacity .1s .1s;
+				}
+				&:nth-child(3) {
+					transition: transform .1s ease .2s, opacity .1s .2s;
+				}
+				&:nth-child(4) {
+					transition: transform .1s ease .3s, opacity .1s .3s;
+				}
+
+				&[data-status='on'] {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+
+	.toggle-options {
+		width: 35px;
+		height: 35px;
+		background-image: url('../assets/images/options.svg');
+		background-size: 100%;
+		background-position: center;
+		background-repeat: no-repeat;
+		opacity: .75;
+		transition: all .2s;
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+	
+	ul {
+		padding-left: 10px;
+		
+		li {
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			margin: 0 10px;
+			background-size: 100%;
+			background-position: center;
+			background-repeat: no-repeat;
+			cursor: pointer;
+			opacity: 0;
+			transform: translateY(-100%);
+			user-select: none;
+			pointer-events: none;
+
+			// &:hover {
+			// 	opacity: 1;
+			// }
+
+			&[data-option='midi'] {
+				background-image: url('../assets/images/midi.svg');
+			}
+			&[data-option='keyboard'] {
+				background-image: url('../assets/images/keyboard.svg');
+			}
+			&[data-option='visualization'] {
+				background-image: url('../assets/images/view.svg');
+			}
+
+
+			&:nth-child(1) {
+				transition: transform .2s ease .3s, opacity .2s .3s;
+			}
+			&:nth-child(2) {
+				transition: transform .2s ease .2s, opacity .2s .2s;
+			}
+			&:nth-child(3) {
+				transition: transform .2s ease .1s, opacity .2s .1s;
+			}
+			&:nth-child(4) {
+				transition: transform .2s ease 0s, opacity .2s 0s;
+			}
+
+			&:after {
+				content: attr(data-status);
+				position: absolute;
+				right: -15px;
+				bottom: -5px;
+				font-size: 9px;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				background-color: $color-accent;
+				color: #222;
+				padding: 2px 4px;
+				border-radius: 4px;
+			}
+		}
+	}
+}
