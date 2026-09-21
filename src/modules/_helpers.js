@@ -24,6 +24,11 @@ const convertColor = (color) => {
 	};
 };
 
+const setParam = (param, value, context, timeConstant = .01) => {
+	param.cancelScheduledValues(context.currentTime);
+	param.setTargetAtTime(value, context.currentTime, timeConstant);
+};
+
 let VENDOR = 'unknown';
 
 (() => {
@@ -71,5 +76,6 @@ let VENDOR = 'unknown';
 export {
 	getRandom,
 	convertColor,
+	setParam,
 	VENDOR
 };

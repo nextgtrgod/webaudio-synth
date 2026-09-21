@@ -1,11 +1,10 @@
-import { AudioContext as sAudioContext } from 'standardized-audio-context';
-
 import Store from './Store'
 import VCO from './VCO'
 import VCF from './VCF'
 import LFO from './LFO'
 import VCA from './VCA'
 import Delay from './Delay'
+import Limiter from './Limiter'
 import Keyboard from './Keyboard'
 import ControlItem from './ControlItem'
 import Wires from './Wires'
@@ -13,16 +12,13 @@ import Visual from './Visual'
 
 import { controlItems } from './_interfaceSettings';
 import { defaultSettings as settings } from './_paramSettings';
-import notes from './_notes';
 
 
 export default class Synth {
 	constructor() {
 
 		try {
-			this.context = window.webkitAudioContext
-				? new sAudioContext()
-				: new AudioContext()
+			this.context = new (window.AudioContext || window.webkitAudioContext)()
 
 			document.body.addEventListener('mousedown', this.resumeAudio)
 			document.body.addEventListener('keydown', this.resumeAudio)
@@ -59,28 +55,32 @@ export default class Synth {
 		});
 
 
-		this.VCOs = {}
-		Object.entries(notes).map(([ n, note ]) => {
 
-			let newVCO = new VCO(this.context, note.name, this.VCF)
+		this.voices = new Map() // note name -> voice
+		this.releasingVoices = new Set()
+		this.maxVoices = 16
 
-			// creating osclillators for every key(note)
-			// and binding it with settings store
-			Object.keys(newVCO.oscillators).forEach(oscName => {
-				['gain', 'detune', 'wavetype', 'offset'].forEach(paramName => {
-					this.store.subscribe(
-						`${oscName}__${paramName}`,
-						() => newVCO.set(
-							oscName,
-							paramName,
-							this.store.settings[`${oscName}__${paramName}`]
-						)
-					)
-				})
-			})
+		this.oscSettings = {}
+		this.modulationInputs = {} // shared LFO input for each oscillator of every voice
 
-			this.VCOs = Object.assign({}, this.VCOs, {
-				[note.name]: newVCO
+		const oscNames = ['osc1', 'osc2', 'osc3']
+		const oscParams = ['gain', 'detune', 'wavetype', 'offset']
+
+		oscNames.forEach(oscName => {
+			this.oscSettings[oscName] = {}
+
+			this.modulationInputs[oscName] = this.context.createGain()
+
+			oscParams.forEach(paramName => {
+				this.store.subscribe(
+					`${oscName}__${paramName}`,
+					() => {
+						let value = this.store.settings[`${oscName}__${paramName}`]
+
+						this.oscSettings[oscName][paramName] = value
+						this.forEachVoice(voice => voice.set(oscName, paramName, value))
+					}
+				)
 			})
 		})
 
@@ -101,7 +101,7 @@ export default class Synth {
 		// creating LFO modulator
 		this.LFO = new LFO(
 			this.context,
-			{ VCOs: this.VCOs, VCF: this.VCF } // objects that will be modulated
+			{ oscillators: this.modulationInputs, VCF: this.VCF } // objects that will be modulated
 		);
 		['amount', 'freq', 'wavetype'].map(paramName => {
 			this.store.subscribe(
@@ -117,10 +117,7 @@ export default class Synth {
 
 
 		// creating VCA (ADSR) modulator
-		this.VCA = new VCA(
-			this.context,
-			{ VCOs: this.VCOs, VCF: this.VCF }
-		);
+		this.VCA = new VCA(this.context);
 		['attack', 'decay', 'sustain', 'release'].map(paramName => {
 			this.store.subscribe(
 				`${paramName}`,
@@ -166,19 +163,72 @@ export default class Synth {
 		this.overallGain = this.context.createGain()
 		this.overallGain.gain.value = .5
 
+		this.Limiter = new Limiter(this.context)
+
 		// connections
 		this.VCF.connect(this.Delay)
 		this.VCF.connect(this.overallGain)
 		this.Delay.connect(this.overallGain)
-		this.overallGain.connect(this.Visual.input)
+		this.overallGain.connect(this.Limiter.input)
+		this.Limiter.connect(this.Visual)
 		this.Visual.connect(this.context.destination)
 
 		document.body.classList.add('loaded')
 	}
 
-	play = (note, freq, velocity) => this.VCOs[note].play(freq, velocity)
+	play = (note, freq, velocity) => {
+		if (this.voices.has(note)) this.stop(note)
 
-	stop = note => this.VCOs[note].stop()
+		this.stealVoices()
+
+		let voice = new VCO(this.context, this.VCF, {
+			freq,
+			velocity,
+			oscSettings: this.oscSettings,
+			modulationInputs: this.modulationInputs,
+			getEnvelope: this.VCA.getEnvelope,
+		})
+
+		voice.onended = () => this.releasingVoices.delete(voice)
+		voice.play()
+
+		this.voices.set(note, voice)
+	}
+
+	stop = note => {
+		let voice = this.voices.get(note)
+
+		if (!voice) return
+
+		this.voices.delete(note)
+		this.releasingVoices.add(voice)
+
+		voice.stop()
+	}
+
+	stealVoices = () => {
+		while (this.voices.size + this.releasingVoices.size >= this.maxVoices) {
+
+			let [ voice ] = this.releasingVoices
+
+			if (voice) {
+				this.releasingVoices.delete(voice)
+			} else {
+				let [ note, oldest ] = this.voices.entries().next().value
+
+				this.voices.delete(note)
+				voice = oldest
+			}
+
+			voice.onended = null
+			voice.choke()
+		}
+	}
+
+	forEachVoice = callback => {
+		this.voices.forEach(callback)
+		this.releasingVoices.forEach(callback)
+	}
 
 	resumeAudio = () => {
 		if (this.context.state !== 'suspended') return

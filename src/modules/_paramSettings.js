@@ -27,7 +27,7 @@ let defaultSettings = {
 	'lfo__wavetype': 'sine',
 
 	// VCA
-	'attack': 	2.45,
+	'attack': 	1.12,
 	'decay': 	.1,
 	'sustain': 	.6,
 	'release': 	1.2,
@@ -60,7 +60,7 @@ try {
 defaultSettings.options = {
 	midi: !!navigator.requestMIDIAccess,
 	keyboard: true,
-	visualization: (VENDOR === 'any-chrome')
+	visualization: true
 }
 
 export { defaultSettings }

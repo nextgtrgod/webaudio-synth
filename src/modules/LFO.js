@@ -1,3 +1,5 @@
+import { setParam } from './_helpers';
+
 
 export default class LFO {
 	constructor(context, modulatedItems) {
@@ -20,10 +22,10 @@ export default class LFO {
 
 		switch (paramName) {
 			case 'amount':
-				this.amount.gain.value = value;
+				setParam(this.amount.gain, value, this.context);
 				break;
 			case 'freq':
-				this.osc.frequency.setValueAtTime(value, this.context.currentTime);
+				setParam(this.osc.frequency, value, this.context);
 				break;
 			case 'wavetype':
 				this.osc.type = value;
@@ -49,13 +51,8 @@ export default class LFO {
 					case 'osc1':
 					case 'osc2':
 					case 'osc3':
-						let VCOs = this.modulatedItems['VCOs'];
 
-						Object.keys(VCOs).map(key => {
-							let port = VCOs[key].oscillators[value].modulated.gain;
-	
-							newPorts.push(port);
-						});
+						newPorts.push(this.modulatedItems['oscillators'][value]);
 						break;
 
 					case 'filter':

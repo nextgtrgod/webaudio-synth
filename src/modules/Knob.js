@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import knob from 'jquery-knob';
+import 'jquery-knob/js/jquery.knob.js';
 import { colors } from './_colors';
 
 

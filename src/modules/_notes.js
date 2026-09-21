@@ -20,7 +20,7 @@ let notes = {
 
 
 // create other octaves
-for (let i = 24; i < 128; i++) {
+for (let i = 24; i + 12 <= 108; i++) {
 	notes[i + 12] = {
 		name: notes[i].name.slice(0, -1) + (~~(i / 12)),
 		freq: notes[i].freq * 2,

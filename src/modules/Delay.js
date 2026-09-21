@@ -1,3 +1,5 @@
+import { setParam } from './_helpers';
+
 
 export default class Delay {
 	constructor(context) {
@@ -22,16 +24,16 @@ export default class Delay {
 	set = (paramName, value) => {
 		switch (paramName) {
 			case 'gain':
-				this.volume.gain.value = value;
+				setParam(this.volume.gain, value, this.context);
 				break;
 			case 'time':
-				this.delay.delayTime.value = value;
+				setParam(this.delay.delayTime, value, this.context, .05);
 				break;
 			case 'feedback':
-				this.feedback.gain.value = value;
+				setParam(this.feedback.gain, value, this.context);
 				break;
 			case 'cutoff':
-				this.filter.frequency.value = value;
+				setParam(this.filter.frequency, value, this.context);
 				break;
 		}
 	}

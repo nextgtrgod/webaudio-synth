@@ -1,4 +1,4 @@
-import Knob from './Knob';
+import { setParam } from './_helpers';
 
 
 export default class VCF {
@@ -21,10 +21,10 @@ export default class VCF {
 
 		switch (paramName) {
 			case 'freq':
-				this.filter.frequency.value = value;
+				setParam(this.filter.frequency, value, this.context);
 				break;
 			case 'qual':
-				this.filter.Q.value = value;
+				setParam(this.filter.Q, value, this.context);
 				break;
 		}
 
