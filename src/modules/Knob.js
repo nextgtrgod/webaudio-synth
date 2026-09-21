@@ -20,7 +20,6 @@ export default class Knob {
 			angleArc:		250,
 			displayInput:	false,
 			font:			'Orbitron',
-			fontSize:		10,
 			cursor:			20,
 			change: 		value => this.handleChange(value)
 		};

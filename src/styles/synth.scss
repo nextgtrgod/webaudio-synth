@@ -219,4 +219,14 @@
 		cursor: pointer;
 	}
 
+	.knob-wrapper {
+		input {
+			font-size: 10px !important;
+
+			&#lfo__freq {
+				font-size: 14px !important;
+			}
+		}
+	}
+
 }
