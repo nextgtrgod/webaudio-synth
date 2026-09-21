@@ -18,6 +18,18 @@ export default class Wires {
 
 		this.canvas = document.getElementById('wires');
 
+		this.width = this.canvas.width;
+		this.height = this.canvas.height;
+
+		let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+		this.canvas.width = this.width * dpr;
+		this.canvas.height = this.height * dpr;
+		this.canvas.style.width = `${this.width}px`;
+		this.canvas.style.height = `${this.height}px`;
+
+		this.canvas.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+
 		// drawing functions
 		this.canvas.drawCircle = (x, y, R = 5, opacity = 1) => {
 			const ctx = this.canvas.getContext('2d');
@@ -233,7 +245,7 @@ export default class Wires {
 			const ctx = this.canvas.getContext('2d');
 
 			// clear previous drawings
-			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			ctx.clearRect(0, 0, this.width, this.height);
 
 			drawPorts(startPort);
 			drawWires();

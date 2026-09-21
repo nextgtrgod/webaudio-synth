@@ -28,6 +28,8 @@ export default class Visual {
 
 		const ctx = this.canvas.getContext('2d');
 
+		ctx.lineWidth = 1;
+
 		let WIDTH
 		let HEIGHT
 		let CENTER = {}
@@ -44,10 +46,16 @@ export default class Visual {
 				y: HEIGHT / 2,
 			}
 
-			this.canvas.width = WIDTH
-			this.canvas.height = HEIGHT
+			let dpr = Math.min(window.devicePixelRatio || 1, 2)
 
-			sliceWidth = Math.round(WIDTH / this.bufferLength)
+			this.canvas.width = WIDTH * dpr
+			this.canvas.height = HEIGHT * dpr
+			this.canvas.style.width = `${WIDTH}px`
+			this.canvas.style.height = `${HEIGHT}px`
+
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+			sliceWidth = WIDTH / (this.bufferLength - 1)
 			sliceHeight = Math.round(HEIGHT / 8)
 			offsetY = CENTER.y - sliceHeight / 2
 		};
@@ -78,24 +86,30 @@ export default class Visual {
 		// draw functions
 		const drawArcs = () => {
 
+			ctx.strokeStyle = `rgb(${this.colors.contrast})`;
+
 			// create many arcs
 			for (let i = 0; i < this.bufferLength; i++) {
+
+				let value = this.frequencyData[i];
+
+				if (value === 0) continue;
+
+				ctx.globalAlpha = value / 255;
 
 				ctx.beginPath();
 				ctx.arc(
 					WIDTH,
 					CENTER.y,
-					~~(circleRadius * (this.frequencyData[i] / 255)),
+					~~(circleRadius * (value / 255)),
 					circleAngle[i].startAngle,
 					circleAngle[i].endAngle
 				);
-				ctx.lineWidth = 1;
-				ctx.strokeStyle = `rgba(${this.colors.contrast}, 
-										${this.frequencyData[i] / 255})`;
-										
 				ctx.stroke();
 
 			};
+
+			ctx.globalAlpha = 1;
 
 		};
 
@@ -110,8 +124,7 @@ export default class Visual {
 			x = 0
 			y = 0
 
-			ctx.lineWidth = 1
-			ctx.strokeStyle = `${colors.accent}`
+			ctx.strokeStyle = colors.accent
 
 			ctx.moveTo(0, CENTER.y)
 
@@ -124,7 +137,6 @@ export default class Visual {
 				x += sliceWidth
 			}
 
-			ctx.moveTo(WIDTH, CENTER.y)
 			ctx.stroke()
 			
 		}
@@ -132,26 +144,35 @@ export default class Visual {
 
 		const drawBars = () => {
 
+			ctx.strokeStyle = `rgb(${this.colors.accent})`;
+
 			// direction
 			let m = 1;
 
 			for (let i = 0; i < this.bufferLength; i++) {
 
-				ctx.beginPath();
-				ctx.moveTo(WIDTH, (i * m) + CENTER.y);
+				let value = this.frequencyData[i];
 
-				ctx.lineTo(
-					WIDTH - this.frequencyData[i],
-					(i * m) + CENTER.y
-				);
+				if (value !== 0) {
 
-				ctx.strokeStyle = `rgba(${this.colors.accent},
-										${this.frequencyData[i] / 255})`;
-				ctx.stroke();
+					ctx.globalAlpha = value / 255;
+
+					ctx.beginPath();
+					ctx.moveTo(WIDTH, (i * m) + CENTER.y);
+
+					ctx.lineTo(
+						WIDTH - value,
+						(i * m) + CENTER.y
+					);
+
+					ctx.stroke();
+				}
 
 				// change direction
 				m *= -1;
 			};
+
+			ctx.globalAlpha = 1;
 
 		};
 
