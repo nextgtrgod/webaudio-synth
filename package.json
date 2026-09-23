@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"jquery": "^3.5.1",
+		"jquery": "^4.0.0",
 		"jquery-knob": "^1.2.11",
 		"qwerty-hancock": "^1.0.0"
 	},

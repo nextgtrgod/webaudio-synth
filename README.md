@@ -22,3 +22,4 @@ Polyphonic synth using Web Audio API. Supports MIDI input
 - [ ] ADSR -> VCF
 - [ ] ADSR -> LFO (!)
 - [x] MIDI
+- [ ] jquery-knob => vanilla implementation
